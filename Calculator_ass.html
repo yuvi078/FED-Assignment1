@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body style="background-color: rgba(80, 108, 139, 0.829);">
+   <center> <h1 style="background-color: rgba(128, 143, 165, 0.594)";">Java Script CALCULATOR:</h1></center>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            // Create calculator container
+            const calculatorContainer = document.createElement('div');
+            calculatorContainer.id = 'calculator';
+            calculatorContainer.style.width = '280px'; // Set calculator width
+            calculatorContainer.style.border = '3px solid #ccc'; // Add border
+            calculatorContainer.style.borderRadius = '15px'; // Add border radius
+            calculatorContainer.style.padding = '23px'; // Add padding
+            calculatorContainer.style.margin = '0 auto'; // Center horizontally
+            document.body.appendChild(calculatorContainer);
+    
+            // Create input field
+            const inputField = document.createElement('input');
+            inputField.type = 'text';
+            inputField.id = 'ans';
+            inputField.style.width = '100%'; // Set input field width
+            inputField.style.boxSizing = 'border-box'; // Include padding in width calculation
+            inputField.style.marginBottom = '20px'; // Add bottom margin
+            inputField.style.fontSize = '22px'; // Set font size
+            inputField.style.padding = '13px'; // Add padding
+            inputField.style.border = '1px solid #ccc'; // Add border
+            calculatorContainer.appendChild(inputField);
+    
+            const buttonValues = [
+                ['7', '8', '9', '/'],
+                ['4', '5', '6', '*'],
+                ['1', '2', '3', '-'],
+                ['0', '.', '=', '+']
+            ];
+    
+            function createButton(value) {
+                const button = document.createElement('input');
+                button.type = 'button';
+                
+                button.value = value;
+                button.className = 'button';
+                button.style.width = '60px'; // Set button width
+                button.style.height = '50px'; // Set button height
+                button.style.margin = '6px'; // Add margin
+                button.style.fontSize = '20px'; // Set font size
+                button.style.border = '1px solid #ccc'; // Add border
+                button.style.borderRadius = '6px'; // Add border radius
+                button.style.backgroundColor = 'lightblue'; // Add background color
+                button.style.cursor = 'pointer'; // Change cursor to pointer
+                button.onclick = function() {
+                    buttonClick(value);
+                };
+                return button;
+            }
+    
+            function buttonClick(value) {
+                if (value === '=') {
+                    calculate();
+                } else {
+                    inputField.value += value;
+                }
+            }
+    
+            function calculate() {
+                const expression = inputField.value;
+                if (expression) {
+                    inputField.value = eval(expression);
+                }
+            }
+    
+            function buttonclear() {
+                inputField.value = "";
+            }
+    
+            function backspace() {
+                inputField.value = inputField.value.slice(0, -1);
+            }
+    
+            document.addEventListener('keypress', function(event) {
+                const keyPressed = event.key;
+                if (keyPressed === 'Enter') {
+                    event.preventDefault(); // Prevent form submission
+                    calculate();
+                } else if (keyPressed === 'Backspace') {
+                    backspace();
+                } else {
+                    const validKeys = /^[0-9+\-*/.=]$/;
+                    if (validKeys.test(keyPressed)) {
+                        buttonClick(keyPressed);
+                    }
+                }
+            });
+    
+            // Create button container
+            const buttonContainer = document.createElement('div');
+            buttonContainer.className = 'button-container';
+            calculatorContainer.appendChild(buttonContainer);
+    
+            // Create buttons
+            for (let rowValues of buttonValues) {
+                const buttonRow = document.createElement('div');
+                buttonRow.className = 'button-row';
+                buttonRow.style.display = 'flex'; // Use flexbox to evenly space buttons
+                buttonRow.style.justifyContent = 'space-between'; // Evenly space buttons
+                for (let value of rowValues) {
+                    const button = createButton(value);
+                    buttonRow.appendChild(button);
+                }
+                buttonContainer.appendChild(buttonRow);
+            }
+    
+            // Create clear button
+            const clearButton = createButton('AC');
+            clearButton.id = 'clr';
+            clearButton.onclick = buttonclear;
+            buttonContainer.appendChild(clearButton);
+    
+            // Create backspace button
+            const backspaceButton = createButton('⌫');
+            backspaceButton.className = 'button';
+            backspaceButton.onclick = backspace;
+            buttonContainer.appendChild(backspaceButton);
+        });
+    </script>
+    
+</body>
+</html>
